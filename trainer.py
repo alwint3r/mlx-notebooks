@@ -28,14 +28,13 @@ def train_epoch(model: nn.Module, data: dx.Stream, optimizer: optim.Optimizer, e
     return loss, accuracy
 
   for batch_idx, batch in enumerate(data):
+    # creating mx.array evaluates the data
     X, y = mx.array(batch["image"]), mx.array(batch["label"])
     tic = time.perf_counter()
     loss, accuracy = step(X, y)
     mx.eval(state)
     toc = time.perf_counter()
 
-    loss = loss.item()
-    accuracy = accuracy.item()
     losses.append(loss)
     accuracies.append(accuracy)
     throughput = X.shape[0] / (toc - tic)
